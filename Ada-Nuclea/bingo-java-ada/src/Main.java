@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -5,7 +6,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        String[] nomeJogadores = new String[] { "Ana", "Maria", "Tereza", "Mariza", "Luiz"};
         Scanner leitor = new Scanner(System.in);
         Random rnd = new Random();
         //Chama a mensagem inicial
@@ -15,16 +15,21 @@ public class Main {
         System.out.println("Entre com a quantidade de Jogadores:");
         int linhas = leitor.nextInt();
         int colunas = 5;
+        //String[] nomeJogadores = new String[linhas];
         int[][] bingo = new int[linhas][colunas];
+        int[][] bingoClone = new int[linhas][colunas];
         int[] tabelaSorteados = new int[60];
         int numeroJogadorGanhador = 0;
         String numerosSorteados = "";
-        String cartela = "";
         //===================================================================================
         //Cria tabela de numeros para sorteio de 1 a 60.
         for (int x = 0; x < 60; x++) {
             tabelaSorteados[x] = x + 1;
         }
+        //cria lista de 33 jogadores
+        String[] nomeJogadores = new String[] {"Ana", "Marta", "Tereza", "Cristina", "Vanessa", "Eva", "Mariza",
+                "Carla", "Mirian", "Helena", "Sheva", "Jil",
+                    "Ada", "Hunigan", "Clair", "Rebeca"};
 
         // Imprimir o array embaralhado
         //System.out.println("Array aleatório: " + Arrays.toString(tabelaSorteados));
@@ -33,14 +38,13 @@ public class Main {
         //===================================================================================
         int numero = 0;
         boolean deuBingo = false;
-        while (opcao == 1 && linhas > 0) {
-           // System.out.println();
-            //Pega um numero sorteado do indice de 1 a 60
+        while (opcao == 1 && linhas > 1 && linhas <= 1000) {
             //Gerar cartelas com 5 numeros ppara cada jogador sem repetição!
             int contador = 0;
             boolean existe = false;
             for (int l = 0; l < linhas; l++) {
                 while (contador < 5) {
+                    //Pega um numero sorteado do indice de 1 a 60
                     int indiceAleatorio = rnd.nextInt(60) + 1;
 
                     for (int x = 0; x < 5; x++) {
@@ -48,22 +52,15 @@ public class Main {
                     }
                     if (existe == false) {
                         bingo[l][contador] = indiceAleatorio;
-                        //System.out.print(bingo[l][contador] + ",");
+                        bingoClone[l][contador] = indiceAleatorio;
                         contador++;
                     }
                     existe = false;
                 }
-                System.out.println();
                 contador = 0;
             }
-            //imprimi cartelas
-            for (int x = 0; x < linhas; x++) {
-                for (int y = 0; y < 5; y++) {
-                    cartela += bingo[x][y] + ",";
-                }
-                System.out.println("Jogador " + (x + 1) + " - " +  cartela);
-                cartela = "";
-            }
+            //imprimir cartelas dos Jogadores
+            imprimirCartelasJogadores(bingo);
 
             //------------------------------------------------------------------------------------
             //Embaralha Array para numeros sorteados.
@@ -102,16 +99,10 @@ public class Main {
                     }
                 }
             }
-            System.out.println("=================================================================");
-            System.out.println("                  BIIIGOOOOOOOOOOOOO !!!                         ");
-            System.out.println("=================================================================");
-            System.out.println("Números sorteados:");
-            System.out.println(numerosSorteados);
-            System.out.println("=================================================================");
-            System.out.println("Vencedor: Jogador - " + (numeroJogadorGanhador + 1));
-            System.out.println("Cartela do ganhador: " + Arrays.toString(bingo[numeroJogadorGanhador]));
-            System.out.println("=================================================================");
-            System.out.println("Deseja jogar Novamente, Digite - [1] ou Digite - [0] para Sair.: ");
+            String nomeJogador = "Não esta na lista dos 33 jogadores";
+            if (numeroJogadorGanhador < nomeJogadores.length) nomeJogador = nomeJogadores[numeroJogadorGanhador];
+            textoFinal(numerosSorteados, nomeJogador,numeroJogadorGanhador, bingoClone);
+
             opcao = leitor.nextInt();
             if (opcao == 1) {
                 System.out.println("Entre com a quantidade de Jogadores:");
@@ -122,7 +113,7 @@ public class Main {
     }
 
     //-----------------------------------------------------------------------------------
-    //FUNCAO
+    //Meus Métodos
     public static void textoInicial() {
         System.out.println("=================================================================");
         System.out.println("=================== BINGO JAVA ADA ==============================");
@@ -132,5 +123,31 @@ public class Main {
         System.out.println("=================================================================");
     }
     //===================================================================================
+    public static void textoFinal(String numerosSorteados, String nomeJogador, int numeroJogador, int[][] numerosDaCartela) {
+        System.out.println("=================================================================");
+        System.out.println("                  BIIIGOOOOOOOOOOOOO !!!                         ");
+        System.out.println("=================================================================");
+        System.out.println("Números sorteados:");
+        System.out.println(numerosSorteados);
+        System.out.println("=================================================================");
+        System.out.println("Vencedor: Jogador - " + (numeroJogador + 1) + " -> " + nomeJogador);
+        System.out.println("Cartela do ganhador: " + Arrays.toString(numerosDaCartela[numeroJogador]));
+        System.out.println("=================================================================");
+        System.out.println("Deseja jogar Novamente, Digite - [1] ou Digite - [0] para Sair.: ");
+    }
+    //=====================================================================================
+    //Imprimir cartelas dos Jogadores
+    public static void imprimirCartelasJogadores(int[][] bingoNumerado) {
+        String cartela = "";
+        for (int l = 0; l < bingoNumerado.length; l++) {
+            for (int y = 0; y < 5; y++) {
+                cartela += bingoNumerado[l][y] + ",";
+            }
+            System.out.println("Jogador " + (l + 1) + " - " +  cartela);
+            cartela = "";
+        }
+    }
+    //=========================================================================================
 
+   //FIM da CLASSE
 }
