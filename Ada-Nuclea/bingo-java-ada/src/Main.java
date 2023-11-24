@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -26,10 +25,16 @@ public class Main {
         for (int x = 0; x < 60; x++) {
             tabelaSorteados[x] = x + 1;
         }
-        //cria lista de 33 jogadores
-        String[] nomeJogadores = new String[] {"Ana", "Marta", "Tereza", "Cristina", "Vanessa", "Eva", "Mariza",
-                "Carla", "Mirian", "Helena", "Sheva", "Jil",
-                    "Ada", "Hunigan", "Clair", "Rebeca"};
+        //cria lista de 33 nome de jogadores
+        String listaNomesT = "Ana-Marta-Tereza-Cristina-Vanessa-Eva-Mariza-Carla-Mirian-Helena-Sheva-Jil-Ada-Hunigan-Clair-Rebeca-Debora";
+        String[] nomeJogadores = new String[linhas];
+        String[] aux = listaNomesT.split("-");
+        for (int numeroJ = 0; numeroJ < linhas; numeroJ++) {
+            nomeJogadores[numeroJ] = "Jogador-";
+        }
+        for (int nome = 0; nome < aux.length; nome++) {
+            nomeJogadores[nome] = aux[nome];
+        }
 
         // Imprimir o array embaralhado
         //System.out.println("Array aleatório: " + Arrays.toString(tabelaSorteados));
@@ -60,7 +65,7 @@ public class Main {
                 contador = 0;
             }
             //imprimir cartelas dos Jogadores
-            imprimirCartelasJogadores(bingo);
+            imprimirCartelasJogadores(nomeJogadores, bingo);
 
             //------------------------------------------------------------------------------------
             //Embaralha Array para numeros sorteados.
@@ -137,14 +142,20 @@ public class Main {
     }
     //=====================================================================================
     //Imprimir cartelas dos Jogadores
-    public static void imprimirCartelasJogadores(int[][] bingoNumerado) {
-        String cartela = "";
+    public static void imprimirCartelasJogadores(String[] nomeJogadores, int[][] bingoNumerado) {
+        String[] cartela = new String[5];
         for (int l = 0; l < bingoNumerado.length; l++) {
-            for (int y = 0; y < 5; y++) {
-                cartela += bingoNumerado[l][y] + ",";
+            for (int i = 0; i < 5; i++) {
+                String aux = "00";
+                if (bingoNumerado[l][i] < 10) {
+                    aux = "0" + bingoNumerado[l][i];
+                    cartela[i] = aux;
+                } else {
+                    cartela[i] = Integer.toString(bingoNumerado[l][i]);
+                }
             }
-            System.out.println("Jogador " + (l + 1) + " - " +  cartela);
-            cartela = "";
+
+            System.out.println(l + 1 + "\t" + "Cartela: " + Arrays.toString(cartela) + "\t" + nomeJogadores[l]);
         }
     }
     //=========================================================================================
